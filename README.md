@@ -1,93 +1,69 @@
-# INDULGE - Premium Dating Platform
+# INDULGE - Premium Sugar Dating Platform
 
-A luxury dating platform with React frontend and FastAPI backend, featuring gold and black aesthetics.
+A luxury dating platform with React frontend and FastAPI backend featuring a stunning gold/black futuristic design.
 
-## Tech Stack
+## Quick Start (GitHub Codespaces)
 
-- **Frontend**: React 18, Framer Motion, Lucide Icons
-- **Backend**: Python 3.11+ / FastAPI
-- **Database**: Supabase (PostgreSQL with SQLAlchemy async)
-- **Auth**: JWT (python-jose) + bcrypt
-- **Email**: Resend
-- **SMS**: Twilio Verify API
+### 1. Create Environment File
 
----
-
-## Quick Start (GitHub Codespaces / Linux)
-
-### 1. Setup Environment File
-
-Create `.env` file in root directory:
 ```bash
 cat > .env << 'EOF'
-DATABASE_URL=postgresql://postgres.gydfdxgttwgloyonntvh:YOUR_PASSWORD@aws-1-eu-central-1.pooler.supabase.com:5432/postgres
-JWT_SECRET_KEY=your-secret-key-change-in-production
+DATABASE_URL=postgresql://postgres.gydfdxgttwgloyonntvh:Tt%4019990423%28%23eden-minnie%21%29@aws-1-eu-central-1.pooler.supabase.com:5432/postgres
+JWT_SECRET_KEY=indulge-secret-key-change-in-production-2024
 CORS_ORIGINS=*
+SUPABASE_URL=https://gydfdxgttwgloyonntvh.supabase.co
+SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd5ZGZkeGd0dHdnbG95b25udHZoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEyMTU5MTMsImV4cCI6MjA4Njc5MTkxM30.a0nCTUnkfFRrJBflIizg93uvEd0bTjLSOeaEFenLAR4
+RESEND_API_KEY=re_iqfUpcRU_2TeNtBUpewantLPRWENzkfCr
+SENDER_EMAIL=onboarding@resend.dev
 EOF
 ```
 
-### 2. Install & Run Backend
+### 2. Install & Run Backend (Terminal 1)
 
 ```bash
-# Remove emergentintegrations if present (it's platform-specific)
+# Remove platform-specific package
 sed -i '/emergentintegrations/d' requirements.txt
 
 # Install dependencies
 pip install -r requirements.txt
 
-# Start backend server
+# Start backend
 python -m uvicorn server:app --reload --host 0.0.0.0 --port 8001
 ```
 
-### 3. Install & Run Frontend (in a new terminal)
+### 3. Install & Run Frontend (Terminal 2)
 
 ```bash
 cd frontend
-
-# Install dependencies
-npm install
-
-# Start frontend
+npm install react-scripts react react-dom react-router-dom axios framer-motion lucide-react --save
 npm start
 ```
 
-### Access the App
+## Access
 
 - **Frontend**: http://localhost:3000
 - **Backend API**: http://localhost:8001
 - **API Docs**: http://localhost:8001/docs
 
----
-
 ## Features
 
-- Landing page with stunning gold/black design
-- User registration (Sugar Baby / Sugar Daddy / Sugar Mommy)
-- Login / Authentication
-- Dashboard with stats
-- Discovery/Swiping feed
-- Matches list
-- Real-time messaging
-- Profile management
-- Verification system
+- **Landing Page**: Stunning hero with animations, features, testimonials
+- **Registration**: Role selection (Sugar Baby/Daddy/Mommy), multi-step signup
+- **Profile Setup**: 5-step wizard (Photos, Video & Voice, About, Lifestyle, Expectations)
+- **Dashboard**: Stats, quick actions, verification progress
+- **Discovery**: Tinder-style swipe cards with photos, videos, voice badges
+- **Matches**: New matches grid, conversations list
+- **Messages**: Real-time chat with media support
+- **Profile Editor**: 8 photos, video, voice note, all profile fields
+- **Settings**: Preferences, privacy, billing, support
 
----
+## Tech Stack
 
-## Project Structure
-
-```
-├── frontend/               # React frontend
-│   ├── src/
-│   │   ├── pages/         # Landing, Login, Signup, Dashboard, etc.
-│   │   ├── contexts/      # Auth context
-│   │   └── index.css      # Global styles (gold/black theme)
-│   └── package.json
-├── server.py              # FastAPI backend
-├── database.py            # Database config
-├── models_pg.py           # SQLAlchemy models
-├── requirements.txt       # Python dependencies
-└── .env                   # Environment variables
-```
+- **Frontend**: React 18, Framer Motion, Lucide Icons
+- **Backend**: Python/FastAPI
+- **Database**: Supabase (PostgreSQL)
+- **Auth**: JWT + bcrypt
+- **Email**: Resend API
 
 ---
 
