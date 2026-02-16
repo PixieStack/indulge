@@ -1,112 +1,147 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Crown, Heart, Shield, Star, Sparkles, ArrowRight, Check } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Crown, Shield, Heart, Star, Sparkles, ArrowRight, Check, 
+  Play, Users, MessageCircle, Video, Mic, ChevronDown,
+  Globe, Lock, Zap, Award
+} from 'lucide-react';
 
 const Landing = () => {
   const navigate = useNavigate();
-  const [hoveredFeature, setHoveredFeature] = useState(null);
+  const [activeTestimonial, setActiveTestimonial] = useState(0);
 
   const features = [
-    { icon: Shield, title: 'Verified Profiles', desc: 'Every member undergoes rigorous verification for authenticity' },
-    { icon: Crown, title: 'Elite Membership', desc: 'Connect with successful, ambitious individuals worldwide' },
-    { icon: Heart, title: 'Meaningful Connections', desc: 'Find relationships that align with your lifestyle' },
-    { icon: Star, title: 'Premium Experience', desc: 'Luxury dating experience with concierge-level service' }
+    {
+      icon: Shield,
+      title: 'Triple Verification',
+      desc: 'Face scan, email & phone verification ensures every profile is authentic',
+      color: '#10B981'
+    },
+    {
+      icon: Video,
+      title: 'Vibe Videos',
+      desc: 'See personality through 15-second profile videos before matching',
+      color: '#8B5CF6'
+    },
+    {
+      icon: Mic,
+      title: 'Voice Intros',
+      desc: 'Hear their voice with 30-second audio introductions',
+      color: '#EC4899'
+    },
+    {
+      icon: Lock,
+      title: 'Secure Communication',
+      desc: 'In-app calls & video chat without sharing personal numbers',
+      color: '#3B82F6'
+    }
   ];
 
   const stats = [
-    { value: '50K+', label: 'Verified Members' },
-    { value: '15K+', label: 'Successful Matches' },
-    { value: '98%', label: 'Satisfaction Rate' },
-    { value: '45+', label: 'Countries' }
+    { value: '100K+', label: 'Verified Members', icon: Users },
+    { value: '50K+', label: 'Successful Matches', icon: Heart },
+    { value: '99%', label: 'Satisfaction Rate', icon: Star },
+    { value: '50+', label: 'Countries', icon: Globe }
   ];
 
+  const testimonials = [
+    { name: 'Alexandra', role: 'Sugar Baby', text: 'Finally a platform that values safety and authenticity. The video profiles make such a difference!', rating: 5 },
+    { name: 'Michael', role: 'Sugar Daddy', text: 'The verification process gives me confidence that connections are real. Worth every penny.', rating: 5 },
+    { name: 'Sophia', role: 'Sugar Baby', text: 'Voice notes changed everything - you can feel the chemistry before even matching.', rating: 5 }
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveTestimonial(prev => (prev + 1) % testimonials.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--black)', overflow: 'hidden' }}>
-      {/* Ambient Background */}
+    <div style={{ background: 'var(--black)', minHeight: '100vh', overflow: 'hidden' }}>
+      {/* Animated Background */}
       <div style={{
         position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
+        inset: 0,
         background: `
-          radial-gradient(ellipse at 20% 20%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
-          radial-gradient(ellipse at 80% 80%, rgba(212, 175, 55, 0.05) 0%, transparent 50%),
-          radial-gradient(ellipse at 50% 50%, rgba(20, 25, 34, 1) 0%, rgba(11, 15, 25, 1) 100%)
+          radial-gradient(ellipse 80% 50% at 20% 40%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
+          radial-gradient(ellipse 60% 40% at 80% 60%, rgba(139, 92, 246, 0.05) 0%, transparent 50%),
+          radial-gradient(ellipse 50% 30% at 50% 90%, rgba(236, 72, 153, 0.05) 0%, transparent 50%)
         `,
         pointerEvents: 'none'
       }} />
 
-      {/* Floating Particles */}
-      {[...Array(20)].map((_, i) => (
+      {/* Floating Orbs */}
+      {[...Array(5)].map((_, i) => (
         <motion.div
           key={i}
           style={{
             position: 'fixed',
-            width: Math.random() * 4 + 2,
-            height: Math.random() * 4 + 2,
-            background: 'var(--gold)',
+            width: 300 + i * 100,
+            height: 300 + i * 100,
             borderRadius: '50%',
-            opacity: Math.random() * 0.3 + 0.1,
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
+            border: '1px solid rgba(212, 175, 55, 0.05)',
+            left: `${20 + i * 15}%`,
+            top: `${10 + i * 10}%`,
+            pointerEvents: 'none'
           }}
-          animate={{
-            y: [0, -30, 0],
-            opacity: [0.1, 0.3, 0.1]
-          }}
-          transition={{
-            duration: Math.random() * 3 + 3,
-            repeat: Infinity,
-            delay: Math.random() * 2
-          }}
+          animate={{ rotate: 360 }}
+          transition={{ duration: 30 + i * 10, repeat: Infinity, ease: 'linear' }}
         />
       ))}
 
       {/* Navigation */}
       <motion.nav
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.8, ease: 'easeOut' }}
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8 }}
         style={{
           position: 'fixed',
           top: 0,
           left: 0,
           right: 0,
           zIndex: 100,
-          padding: '20px 60px',
+          padding: '16px 40px',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          background: 'rgba(11, 15, 25, 0.8)',
+          background: 'rgba(3, 5, 8, 0.8)',
           backdropFilter: 'blur(20px)',
           borderBottom: '1px solid rgba(212, 175, 55, 0.1)'
         }}
       >
         <motion.div 
-          style={{ display: 'flex', alignItems: 'center', gap: 12 }}
+          style={{ display: 'flex', alignItems: 'center', gap: 10 }}
           whileHover={{ scale: 1.02 }}
         >
-          <Crown size={28} color="#D4AF37" />
+          <div style={{
+            width: 40,
+            height: 40,
+            borderRadius: 10,
+            background: 'var(--gradient-gold)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            <Crown size={22} color="#030508" />
+          </div>
           <span style={{ 
             fontFamily: 'Playfair Display', 
-            fontSize: '1.8rem', 
-            fontWeight: 600,
-            background: 'linear-gradient(135deg, #E8C547 0%, #D4AF37 50%, #B8960C 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent'
-          }}>
+            fontSize: '1.6rem',
+            fontWeight: 600
+          }} className="gold-text">
             INDULGE
           </span>
         </motion.div>
 
-        <div style={{ display: 'flex', gap: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate('/login')}
-            className="btn-outline"
+            className="btn btn-ghost"
+            style={{ padding: '10px 24px' }}
           >
             Sign In
           </motion.button>
@@ -114,9 +149,10 @@ const Landing = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate('/signup')}
-            className="btn-gold"
+            className="btn btn-gold"
+            style={{ padding: '10px 24px' }}
           >
-            Join Now
+            Join Free
           </motion.button>
         </div>
       </motion.nav>
@@ -126,20 +162,28 @@ const Landing = () => {
         minHeight: '100vh',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
-        padding: '120px 60px 80px',
+        padding: '120px 40px 80px',
         position: 'relative'
       }}>
-        <div style={{ maxWidth: 1400, width: '100%', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'center' }}>
+        <div style={{ 
+          maxWidth: 1400, 
+          margin: '0 auto', 
+          width: '100%',
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: 80,
+          alignItems: 'center'
+        }}>
+          {/* Left Content */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
+            initial={{ opacity: 0, x: -60 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, delay: 0.2 }}
           >
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
+              transition={{ delay: 0.4 }}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -147,56 +191,66 @@ const Landing = () => {
                 padding: '8px 16px',
                 background: 'rgba(212, 175, 55, 0.1)',
                 borderRadius: 50,
-                marginBottom: 24,
-                border: '1px solid rgba(212, 175, 55, 0.2)'
+                border: '1px solid rgba(212, 175, 55, 0.2)',
+                marginBottom: 28
               }}
             >
-              <Sparkles size={16} color="#D4AF37" />
-              <span style={{ color: 'var(--gold)', fontSize: 14, fontWeight: 500 }}>Premium Dating Experience</span>
+              <Sparkles size={14} color="#D4AF37" />
+              <span style={{ color: 'var(--gold)', fontSize: 13, fontWeight: 500 }}>
+                Premium Sugar Dating Platform
+              </span>
             </motion.div>
 
             <h1 style={{ 
-              fontSize: '4.5rem', 
-              lineHeight: 1.1, 
+              fontSize: 'clamp(2.5rem, 5vw, 4rem)',
+              lineHeight: 1.1,
               marginBottom: 24,
               fontWeight: 500
             }}>
-              Where <span className="gold-text">Ambition</span><br />
-              Meets <span className="gold-text">Desire</span>
+              Where <span className="gold-text">Luxury</span> Meets
+              <br />
+              <span className="gold-text">Authentic</span> Connection
             </h1>
 
             <p style={{ 
-              fontSize: '1.2rem', 
-              color: 'var(--gray-light)', 
+              fontSize: '1.15rem',
+              color: 'var(--gray-400)',
               marginBottom: 40,
-              maxWidth: 500,
+              maxWidth: 520,
               lineHeight: 1.8
             }}>
-              The exclusive platform for exceptional individuals seeking meaningful connections. 
-              Experience dating elevated to an art form.
+              The most secure sugar dating platform with mandatory verification, 
+              video profiles, and voice introductions. No catfishing, just real connections.
             </p>
 
-            <div style={{ display: 'flex', gap: 16, marginBottom: 60 }}>
+            <div style={{ display: 'flex', gap: 16, marginBottom: 48 }}>
               <motion.button
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.05, boxShadow: '0 20px 40px rgba(212, 175, 55, 0.4)' }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => navigate('/signup')}
-                className="btn-gold"
-                style={{ display: 'flex', alignItems: 'center', gap: 8 }}
+                className="btn btn-gold"
+                style={{ padding: '16px 36px', fontSize: '1rem' }}
               >
-                Start Your Journey <ArrowRight size={18} />
+                Start Free <ArrowRight size={18} />
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="btn-outline"
+                className="btn btn-outline"
+                style={{ padding: '16px 36px' }}
               >
-                Learn More
+                <Play size={18} /> Watch Demo
               </motion.button>
             </div>
 
-            {/* Stats */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 32 }}>
+            {/* Stats Row */}
+            <div style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(4, 1fr)', 
+              gap: 24,
+              padding: '24px 0',
+              borderTop: '1px solid rgba(255,255,255,0.06)'
+            }}>
               {stats.map((stat, i) => (
                 <motion.div
                   key={i}
@@ -204,104 +258,242 @@ const Landing = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.8 + i * 0.1 }}
                 >
-                  <div className="gold-text" style={{ fontSize: '2rem', fontWeight: 600, fontFamily: 'Playfair Display' }}>
+                  <div className="gold-text" style={{ 
+                    fontSize: '1.8rem', 
+                    fontWeight: 700,
+                    fontFamily: 'Inter',
+                    marginBottom: 4
+                  }}>
                     {stat.value}
                   </div>
-                  <div style={{ color: 'var(--gray)', fontSize: 14 }}>{stat.label}</div>
+                  <div style={{ color: 'var(--gray-500)', fontSize: 13 }}>{stat.label}</div>
                 </motion.div>
               ))}
             </div>
           </motion.div>
 
-          {/* Hero Image/Visual */}
+          {/* Right - Hero Visual */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
+            initial={{ opacity: 0, x: 60 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, delay: 0.4 }}
             style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}
           >
+            {/* Glowing Background */}
+            <div style={{
+              position: 'absolute',
+              width: '120%',
+              height: '120%',
+              background: 'radial-gradient(circle at center, rgba(212, 175, 55, 0.15) 0%, transparent 60%)',
+              filter: 'blur(60px)'
+            }} />
+
+            {/* Phone Mockup */}
             <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
-              style={{
-                position: 'absolute',
-                width: 500,
-                height: 500,
-                border: '1px solid rgba(212, 175, 55, 0.2)',
-                borderRadius: '50%'
-              }}
-            />
-            <motion.div
-              animate={{ rotate: -360 }}
-              transition={{ duration: 45, repeat: Infinity, ease: 'linear' }}
-              style={{
-                position: 'absolute',
-                width: 400,
-                height: 400,
-                border: '1px solid rgba(212, 175, 55, 0.15)',
-                borderRadius: '50%'
-              }}
-            />
-            
-            <motion.div
+              animate={{ y: [0, -15, 0] }}
+              transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
               style={{
                 width: 320,
-                height: 450,
-                background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.2) 0%, rgba(212, 175, 55, 0.05) 100%)',
-                borderRadius: 24,
-                border: '1px solid rgba(212, 175, 55, 0.3)',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
+                height: 650,
+                background: 'linear-gradient(180deg, #1a1a2e 0%, #0f0f1a 100%)',
+                borderRadius: 40,
+                border: '3px solid rgba(212, 175, 55, 0.3)',
+                padding: 12,
                 position: 'relative',
-                overflow: 'hidden'
+                boxShadow: '0 50px 100px rgba(0,0,0,0.5), 0 0 100px rgba(212, 175, 55, 0.1)'
               }}
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
             >
+              {/* Phone Screen */}
               <div style={{
-                width: 120,
-                height: 120,
-                borderRadius: '50%',
-                background: 'linear-gradient(135deg, var(--gold-light), var(--gold-dark))',
+                width: '100%',
+                height: '100%',
+                background: 'var(--black)',
+                borderRadius: 28,
+                overflow: 'hidden',
+                position: 'relative'
+              }}>
+                {/* Profile Card Preview */}
+                <div style={{
+                  height: '65%',
+                  background: 'linear-gradient(180deg, rgba(212, 175, 55, 0.2) 0%, rgba(212, 175, 55, 0.05) 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  position: 'relative'
+                }}>
+                  <div style={{
+                    width: 100,
+                    height: 100,
+                    borderRadius: '50%',
+                    background: 'var(--gradient-gold)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: '0 20px 60px rgba(212, 175, 55, 0.4)'
+                  }}>
+                    <span style={{ fontSize: 40, color: '#030508', fontWeight: 600 }}>S</span>
+                  </div>
+                  
+                  {/* Verified Badge */}
+                  <div style={{
+                    position: 'absolute',
+                    top: 16,
+                    right: 16,
+                    background: 'rgba(16, 185, 129, 0.2)',
+                    padding: '6px 12px',
+                    borderRadius: 20,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 6
+                  }}>
+                    <Shield size={12} color="#10B981" />
+                    <span style={{ fontSize: 11, color: '#10B981' }}>Verified</span>
+                  </div>
+                </div>
+
+                {/* Info */}
+                <div style={{ padding: 20 }}>
+                  <h3 style={{ fontSize: 22, marginBottom: 4 }}>Sophia, <span style={{ fontWeight: 400, color: 'var(--gray-400)' }}>24</span></h3>
+                  <p style={{ color: 'var(--gray-500)', fontSize: 13, marginBottom: 16 }}>Los Angeles, CA</p>
+                  
+                  <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                    {['Travel', 'Fashion', 'Fine Dining'].map((tag, i) => (
+                      <span key={i} className="tag" style={{ fontSize: 11, padding: '4px 10px' }}>{tag}</span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div style={{
+                  position: 'absolute',
+                  bottom: 20,
+                  left: 0,
+                  right: 0,
+                  display: 'flex',
+                  justifyContent: 'center',
+                  gap: 20
+                }}>
+                  <div style={{
+                    width: 56,
+                    height: 56,
+                    borderRadius: '50%',
+                    background: 'rgba(239, 68, 68, 0.15)',
+                    border: '2px solid rgba(239, 68, 68, 0.3)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    <span style={{ fontSize: 24 }}>✕</span>
+                  </div>
+                  <div style={{
+                    width: 70,
+                    height: 70,
+                    borderRadius: '50%',
+                    background: 'var(--gradient-gold)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: '0 10px 30px rgba(212, 175, 55, 0.4)'
+                  }}>
+                    <Heart size={28} color="#030508" fill="#030508" />
+                  </div>
+                  <div style={{
+                    width: 56,
+                    height: 56,
+                    borderRadius: '50%',
+                    background: 'rgba(139, 92, 246, 0.15)',
+                    border: '2px solid rgba(139, 92, 246, 0.3)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    <Star size={22} color="#8B5CF6" />
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Floating Elements */}
+            <motion.div
+              animate={{ y: [0, -10, 0], rotate: [0, 5, 0] }}
+              transition={{ duration: 4, repeat: Infinity }}
+              style={{
+                position: 'absolute',
+                top: '10%',
+                left: '5%',
+                padding: '12px 16px',
+                background: 'rgba(16, 185, 129, 0.1)',
+                borderRadius: 12,
+                border: '1px solid rgba(16, 185, 129, 0.2)',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: 24
-              }}>
-                <Crown size={50} color="#0B0F19" />
-              </div>
-              <h3 style={{ fontSize: '1.5rem', marginBottom: 8 }}>Elite Member</h3>
-              <p style={{ color: 'var(--gray-light)', fontSize: 14 }}>Verified & Authentic</p>
-              
-              <div style={{
+                gap: 8
+              }}
+            >
+              <Shield size={18} color="#10B981" />
+              <span style={{ color: '#10B981', fontSize: 13, fontWeight: 500 }}>100% Verified</span>
+            </motion.div>
+
+            <motion.div
+              animate={{ y: [0, 10, 0], rotate: [0, -5, 0] }}
+              transition={{ duration: 5, repeat: Infinity }}
+              style={{
                 position: 'absolute',
-                bottom: 0,
-                left: 0,
-                right: 0,
-                height: 80,
-                background: 'linear-gradient(to top, rgba(11, 15, 25, 0.9), transparent)'
-              }} />
+                bottom: '20%',
+                right: '5%',
+                padding: '12px 16px',
+                background: 'rgba(139, 92, 246, 0.1)',
+                borderRadius: 12,
+                border: '1px solid rgba(139, 92, 246, 0.2)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8
+              }}
+            >
+              <Video size={18} color="#8B5CF6" />
+              <span style={{ color: '#8B5CF6', fontSize: 13, fontWeight: 500 }}>Video Profiles</span>
             </motion.div>
           </motion.div>
         </div>
+
+        {/* Scroll Indicator */}
+        <motion.div
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          style={{
+            position: 'absolute',
+            bottom: 40,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 8,
+            color: 'var(--gray-500)'
+          }}
+        >
+          <span style={{ fontSize: 12 }}>Scroll to explore</span>
+          <ChevronDown size={20} />
+        </motion.div>
       </section>
 
       {/* Features Section */}
-      <section style={{ padding: '100px 60px', position: 'relative' }}>
-        <div style={{ maxWidth: 1400, margin: '0 auto' }}>
+      <section style={{ padding: '100px 40px', position: 'relative' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             style={{ textAlign: 'center', marginBottom: 80 }}
           >
-            <h2 style={{ fontSize: '3rem', marginBottom: 16 }}>
-              Why Choose <span className="gold-text">INDULGE</span>
+            <span className="tag" style={{ marginBottom: 16, display: 'inline-flex' }}>
+              <Zap size={14} /> Why INDULGE
+            </span>
+            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', marginBottom: 20 }}>
+              Dating Reimagined for the <span className="gold-text">Modern Era</span>
             </h2>
-            <p style={{ color: 'var(--gray-light)', fontSize: '1.1rem', maxWidth: 600, margin: '0 auto' }}>
-              We've crafted every detail to ensure your journey to finding the perfect connection is nothing short of extraordinary.
+            <p style={{ color: 'var(--gray-400)', fontSize: '1.1rem', maxWidth: 600, margin: '0 auto' }}>
+              We've built the safest, most authentic sugar dating experience with features that matter.
             </p>
           </motion.div>
 
@@ -313,32 +505,24 @@ const Landing = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                onMouseEnter={() => setHoveredFeature(i)}
-                onMouseLeave={() => setHoveredFeature(null)}
-                style={{
-                  padding: 32,
-                  background: hoveredFeature === i ? 'rgba(212, 175, 55, 0.08)' : 'rgba(255, 255, 255, 0.02)',
-                  borderRadius: 20,
-                  border: `1px solid ${hoveredFeature === i ? 'rgba(212, 175, 55, 0.3)' : 'rgba(255, 255, 255, 0.05)'}`,
-                  transition: 'all 0.3s ease',
-                  cursor: 'pointer'
-                }}
+                whileHover={{ y: -8, borderColor: `${feature.color}40` }}
+                className="card"
+                style={{ padding: 32, textAlign: 'center' }}
               >
                 <div style={{
-                  width: 60,
-                  height: 60,
+                  width: 64,
+                  height: 64,
                   borderRadius: 16,
-                  background: hoveredFeature === i ? 'var(--gold)' : 'rgba(212, 175, 55, 0.1)',
+                  background: `${feature.color}15`,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  marginBottom: 20,
-                  transition: 'all 0.3s ease'
+                  margin: '0 auto 20px'
                 }}>
-                  <feature.icon size={28} color={hoveredFeature === i ? '#0B0F19' : '#D4AF37'} />
+                  <feature.icon size={28} color={feature.color} />
                 </div>
-                <h3 style={{ fontSize: '1.2rem', marginBottom: 12 }}>{feature.title}</h3>
-                <p style={{ color: 'var(--gray-light)', fontSize: 14, lineHeight: 1.7 }}>{feature.desc}</p>
+                <h3 style={{ fontSize: '1.15rem', marginBottom: 12 }}>{feature.title}</h3>
+                <p style={{ color: 'var(--gray-500)', fontSize: 14, lineHeight: 1.7 }}>{feature.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -346,15 +530,15 @@ const Landing = () => {
       </section>
 
       {/* CTA Section */}
-      <section style={{ padding: '100px 60px', position: 'relative' }}>
+      <section style={{ padding: '100px 40px' }}>
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           style={{
-            maxWidth: 1000,
+            maxWidth: 900,
             margin: '0 auto',
-            padding: 80,
+            padding: '80px 60px',
             background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(212, 175, 55, 0.02) 100%)',
             borderRadius: 32,
             border: '1px solid rgba(212, 175, 55, 0.2)',
@@ -369,34 +553,51 @@ const Landing = () => {
             right: -100,
             width: 300,
             height: 300,
-            background: 'radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%)',
-            borderRadius: '50%'
+            background: 'radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, transparent 70%)',
+            filter: 'blur(40px)'
           }} />
-          
-          <Crown size={48} color="#D4AF37" style={{ marginBottom: 24 }} />
-          <h2 style={{ fontSize: '2.5rem', marginBottom: 16 }}>
-            Ready to <span className="gold-text">Elevate</span> Your Dating Life?
+
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+            style={{
+              width: 80,
+              height: 80,
+              borderRadius: '50%',
+              background: 'var(--gradient-gold)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 32px',
+              boxShadow: '0 20px 60px rgba(212, 175, 55, 0.4)'
+            }}
+          >
+            <Crown size={36} color="#030508" />
+          </motion.div>
+
+          <h2 style={{ fontSize: 'clamp(1.8rem, 3vw, 2.5rem)', marginBottom: 20 }}>
+            Ready to Find Your <span className="gold-text">Perfect Match?</span>
           </h2>
-          <p style={{ color: 'var(--gray-light)', fontSize: '1.1rem', marginBottom: 40, maxWidth: 500, margin: '0 auto 40px' }}>
-            Join thousands of successful individuals who have found their perfect match on INDULGE.
+          <p style={{ color: 'var(--gray-400)', fontSize: '1.1rem', marginBottom: 40, maxWidth: 500, margin: '0 auto 40px' }}>
+            Join thousands of verified members. Sugar Babies join free. Sugar Daddies & Mommies get premium access.
           </p>
-          
-          <div style={{ display: 'flex', gap: 16, justifyContent: 'center' }}>
+
+          <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate('/signup')}
-              className="btn-gold"
+              className="btn btn-gold"
               style={{ padding: '18px 48px', fontSize: '1rem' }}
             >
-              Create Free Account
+              Create Free Account <ArrowRight size={18} />
             </motion.button>
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 32, marginTop: 40 }}>
-            {['No credit card required', 'Cancel anytime', 'Privacy guaranteed'].map((item, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--gray-light)', fontSize: 14 }}>
-                <Check size={16} color="#D4AF37" />
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 32, marginTop: 40, flexWrap: 'wrap' }}>
+            {['Sugar Babies join FREE', 'No credit card required', 'Cancel anytime'].map((item, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--gray-400)', fontSize: 14 }}>
+                <Check size={16} color="#10B981" />
                 {item}
               </div>
             ))}
@@ -406,16 +607,26 @@ const Landing = () => {
 
       {/* Footer */}
       <footer style={{
-        padding: '60px',
-        borderTop: '1px solid rgba(212, 175, 55, 0.1)',
+        padding: '60px 40px',
+        borderTop: '1px solid rgba(255,255,255,0.06)',
         textAlign: 'center'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginBottom: 24 }}>
-          <Crown size={24} color="#D4AF37" />
-          <span style={{ fontFamily: 'Playfair Display', fontSize: '1.5rem' }} className="gold-text">INDULGE</span>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 20 }}>
+          <div style={{
+            width: 36,
+            height: 36,
+            borderRadius: 8,
+            background: 'var(--gradient-gold)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            <Crown size={18} color="#030508" />
+          </div>
+          <span className="gold-text" style={{ fontFamily: 'Playfair Display', fontSize: '1.4rem' }}>INDULGE</span>
         </div>
-        <p style={{ color: 'var(--gray)', fontSize: 14 }}>
-          © 2025 INDULGE. All rights reserved. Premium Dating for Exceptional Connections.
+        <p style={{ color: 'var(--gray-600)', fontSize: 13 }}>
+          © 2025 INDULGE. Premium Sugar Dating Platform. All rights reserved.
         </p>
       </footer>
     </div>
