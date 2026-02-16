@@ -1,379 +1,410 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
-  Crown, Heart, MessageCircle, User, Settings, LogOut, 
-  Compass, Users, Bell, Shield, ChevronRight, Sparkles,
-  CheckCircle, XCircle, Clock
+  Crown, Heart, MessageCircle, User, Settings, Compass,
+  Sparkles, Bell, ChevronRight, Shield, CheckCircle, Clock,
+  TrendingUp, Eye, Star, Zap
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { api } from '../contexts/AuthContext';
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
-  const [stats, setStats] = useState({ matches: 0, likes: 0 });
-  const [matches, setMatches] = useState([]);
+  const { user } = useAuth();
+  const [stats, setStats] = useState({ matches: 0, views: 0, likes: 0 });
 
-  useEffect(() => {
-    fetchMatches();
-  }, []);
-
-  const fetchMatches = async () => {
-    try {
-      const res = await api.get('/api/matches');
-      setMatches(res.data.matches || []);
-      setStats(prev => ({ ...prev, matches: res.data.matches?.length || 0 }));
-    } catch (err) {
-      console.error('Failed to fetch matches:', err);
-    }
-  };
-
-  const navItems = [
-    { icon: Compass, label: 'Discover', path: '/discover', color: '#F472B6' },
-    { icon: Heart, label: 'Matches', path: '/matches', color: '#EF4444' },
-    { icon: MessageCircle, label: 'Messages', path: '/matches', color: '#60A5FA' },
-    { icon: User, label: 'Profile', path: '/profile', color: '#A78BFA' }
+  const quickActions = [
+    { icon: Compass, label: 'Discover', desc: 'Find matches', path: '/discover', color: '#EC4899', gradient: 'linear-gradient(135deg, #EC4899 0%, #BE185D 100%)' },
+    { icon: Heart, label: 'Matches', desc: 'View matches', path: '/matches', color: '#EF4444', gradient: 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)' },
+    { icon: MessageCircle, label: 'Messages', desc: 'Chat now', path: '/matches', color: '#3B82F6', gradient: 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)' },
+    { icon: User, label: 'Profile', desc: 'Edit profile', path: '/profile', color: '#8B5CF6', gradient: 'linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%)' }
   ];
 
   const verificationSteps = [
-    { id: 'email', label: 'Email Verified', done: user?.email_verified },
-    { id: 'phone', label: 'Phone Verified', done: user?.phone_verified },
-    { id: 'face', label: 'Face Verified', done: user?.face_verified },
-    { id: 'payment', label: 'Identity Confirmed', done: user?.verification_paid }
+    { id: 'email', label: 'Email', done: user?.email_verified },
+    { id: 'phone', label: 'Phone', done: user?.phone_verified },
+    { id: 'face', label: 'Photo ID', done: user?.face_verified },
+    { id: 'payment', label: 'Identity', done: user?.verification_paid }
   ];
 
   const completedSteps = verificationSteps.filter(s => s.done).length;
   const verificationProgress = (completedSteps / verificationSteps.length) * 100;
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--black)', display: 'flex' }}>
-      {/* Sidebar */}
-      <motion.aside
-        initial={{ x: -100, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        style={{
-          width: 280,
-          padding: 24,
-          borderRight: '1px solid rgba(212, 175, 55, 0.1)',
-          display: 'flex',
-          flexDirection: 'column',
-          position: 'fixed',
-          top: 0,
-          bottom: 0,
-          left: 0,
-          background: 'var(--black-light)'
-        }}
-      >
-        {/* Logo */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 40 }}>
-          <Crown size={28} color="#D4AF37" />
-          <span className="gold-text" style={{ fontFamily: 'Playfair Display', fontSize: '1.5rem' }}>INDULGE</span>
+    <div style={{ 
+      minHeight: '100vh', 
+      background: 'var(--black)',
+      paddingBottom: 100 
+    }}>
+      {/* Background Effects */}
+      <div style={{
+        position: 'fixed',
+        inset: 0,
+        background: `
+          radial-gradient(ellipse at 20% 0%, rgba(212, 175, 55, 0.06) 0%, transparent 50%),
+          radial-gradient(ellipse at 80% 100%, rgba(139, 92, 246, 0.04) 0%, transparent 50%)
+        `,
+        pointerEvents: 'none'
+      }} />
+
+      {/* Header */}
+      <header style={{
+        position: 'sticky',
+        top: 0,
+        padding: '16px 24px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        background: 'rgba(3, 5, 8, 0.9)',
+        backdropFilter: 'blur(20px)',
+        borderBottom: '1px solid rgba(255,255,255,0.06)',
+        zIndex: 100
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{
+            width: 36,
+            height: 36,
+            borderRadius: 8,
+            background: 'var(--gradient-gold)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            <Crown size={18} color="#030508" />
+          </div>
+          <span className="gold-text" style={{ fontFamily: 'Playfair Display', fontSize: '1.3rem' }}>
+            INDULGE
+          </span>
         </div>
 
-        {/* User Card */}
-        <div style={{
-          padding: 20,
-          background: 'rgba(212, 175, 55, 0.05)',
-          borderRadius: 16,
-          border: '1px solid rgba(212, 175, 55, 0.1)',
-          marginBottom: 32
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-            <div style={{
-              width: 48,
-              height: 48,
-              borderRadius: '50%',
-              background: 'linear-gradient(135deg, var(--gold-light), var(--gold-dark))',
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            style={{
+              width: 40,
+              height: 40,
+              borderRadius: 10,
+              background: 'rgba(255,255,255,0.05)',
+              border: 'none',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              <span style={{ color: 'var(--black)', fontWeight: 600, fontSize: 18 }}>
-                {user?.first_name?.[0]?.toUpperCase() || 'U'}
-              </span>
+              justifyContent: 'center',
+              cursor: 'pointer',
+              position: 'relative'
+            }}
+          >
+            <Bell size={18} color="var(--gray-400)" />
+            <span className="badge" style={{ position: 'absolute', top: -4, right: -4, minWidth: 16, height: 16, fontSize: 10 }}>3</span>
+          </motion.button>
+          
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => navigate('/settings')}
+            style={{
+              width: 40,
+              height: 40,
+              borderRadius: 10,
+              background: 'rgba(255,255,255,0.05)',
+              border: 'none',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer'
+            }}
+          >
+            <Settings size={18} color="var(--gray-400)" />
+          </motion.button>
+        </div>
+      </header>
+
+      <div style={{ padding: '24px', maxWidth: 800, margin: '0 auto' }}>
+        {/* Welcome Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="card-gold"
+          style={{
+            padding: 28,
+            borderRadius: 24,
+            marginBottom: 24,
+            position: 'relative',
+            overflow: 'hidden'
+          }}
+        >
+          <div style={{
+            position: 'absolute',
+            top: -50,
+            right: -50,
+            width: 200,
+            height: 200,
+            background: 'radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, transparent 70%)',
+            filter: 'blur(40px)'
+          }} />
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 20 }}>
+            <div className="avatar xl">
+              {user?.photos?.[0] ? (
+                <img src={user.photos[0]} alt="Profile" />
+              ) : (
+                user?.first_name?.[0]?.toUpperCase() || 'U'
+              )}
             </div>
             <div>
-              <h3 style={{ fontSize: 16, marginBottom: 2 }}>{user?.first_name || 'User'}</h3>
-              <span style={{
-                fontSize: 12,
-                color: 'var(--gold)',
-                textTransform: 'capitalize',
-                background: 'rgba(212, 175, 55, 0.1)',
-                padding: '2px 8px',
-                borderRadius: 20
-              }}>
-                {user?.role || 'Member'}
-              </span>
+              <h1 style={{ fontSize: '1.6rem', marginBottom: 4 }}>
+                Welcome back, <span className="gold-text">{user?.first_name || 'there'}</span>
+              </h1>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span className="tag" style={{ 
+                  textTransform: 'capitalize',
+                  fontSize: 12,
+                  padding: '4px 12px'
+                }}>
+                  {user?.role === 'baby' ? 'Sugar Baby' : user?.role === 'daddy' ? 'Sugar Daddy' : 'Sugar Mommy'}
+                </span>
+                {completedSteps === 4 && (
+                  <span style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: 4,
+                    color: '#10B981',
+                    fontSize: 12
+                  }}>
+                    <Shield size={12} /> Verified
+                  </span>
+                )}
+              </div>
             </div>
           </div>
 
           {/* Verification Progress */}
-          <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-              <span style={{ fontSize: 12, color: 'var(--gray-light)' }}>Profile Verification</span>
-              <span style={{ fontSize: 12, color: 'var(--gold)' }}>{completedSteps}/{verificationSteps.length}</span>
-            </div>
+          {verificationProgress < 100 && (
             <div style={{
-              height: 6,
-              background: 'rgba(255,255,255,0.1)',
-              borderRadius: 3,
-              overflow: 'hidden'
+              padding: 16,
+              background: 'rgba(0,0,0,0.2)',
+              borderRadius: 12,
+              marginTop: 16
             }}>
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: `${verificationProgress}%` }}
-                transition={{ duration: 1, delay: 0.5 }}
-                style={{
-                  height: '100%',
-                  background: 'linear-gradient(90deg, var(--gold-light), var(--gold))',
-                  borderRadius: 3
-                }}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Navigation */}
-        <nav style={{ flex: 1 }}>
-          {navItems.map((item, i) => (
-            <motion.button
-              key={item.label}
-              whileHover={{ x: 4 }}
-              onClick={() => navigate(item.path)}
-              style={{
-                width: '100%',
-                padding: '14px 16px',
-                background: 'transparent',
-                border: 'none',
-                borderRadius: 12,
-                display: 'flex',
-                alignItems: 'center',
-                gap: 14,
-                color: 'var(--white)',
-                marginBottom: 8,
-                cursor: 'pointer',
-                transition: 'all 0.2s ease'
-              }}
-              onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.05)'}
-              onMouseLeave={(e) => e.target.style.background = 'transparent'}
-            >
-              <div style={{
-                width: 40,
-                height: 40,
-                borderRadius: 10,
-                background: `${item.color}15`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-                <item.icon size={20} color={item.color} />
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
+                <span style={{ fontSize: 13, color: 'var(--gray-300)' }}>Profile Verification</span>
+                <span style={{ fontSize: 13, color: 'var(--gold)' }}>{completedSteps}/4</span>
               </div>
-              <span style={{ fontSize: 15 }}>{item.label}</span>
-            </motion.button>
-          ))}
-        </nav>
-
-        {/* Logout */}
-        <motion.button
-          whileHover={{ x: 4 }}
-          onClick={() => { logout(); navigate('/'); }}
-          style={{
-            width: '100%',
-            padding: '14px 16px',
-            background: 'transparent',
-            border: '1px solid rgba(239, 68, 68, 0.2)',
-            borderRadius: 12,
-            display: 'flex',
-            alignItems: 'center',
-            gap: 14,
-            color: '#EF4444',
-            cursor: 'pointer'
-          }}
-        >
-          <LogOut size={20} />
-          <span style={{ fontSize: 15 }}>Sign Out</span>
-        </motion.button>
-      </motion.aside>
-
-      {/* Main Content */}
-      <main style={{ flex: 1, marginLeft: 280, padding: 40 }}>
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          style={{ marginBottom: 40 }}
-        >
-          <h1 style={{ fontSize: '2.5rem', marginBottom: 8 }}>
-            Welcome back, <span className="gold-text">{user?.first_name || 'there'}</span>
-          </h1>
-          <p style={{ color: 'var(--gray-light)', fontSize: 16 }}>
-            Here's what's happening with your profile today
-          </p>
+              <div className="progress-bar">
+                <motion.div 
+                  className="progress-fill"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${verificationProgress}%` }}
+                  transition={{ duration: 1 }}
+                />
+              </div>
+              <div style={{ display: 'flex', gap: 12, marginTop: 12 }}>
+                {verificationSteps.map(step => (
+                  <span key={step.id} style={{ 
+                    fontSize: 11, 
+                    color: step.done ? '#10B981' : 'var(--gray-500)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 4
+                  }}>
+                    {step.done ? <CheckCircle size={12} /> : <Clock size={12} />}
+                    {step.label}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
         </motion.div>
 
-        {/* Stats Cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, marginBottom: 40 }}>
+        {/* Stats */}
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(3, 1fr)', 
+          gap: 16,
+          marginBottom: 24
+        }}>
           {[
-            { icon: Heart, label: 'Total Matches', value: stats.matches, color: '#EF4444' },
-            { icon: Sparkles, label: 'Profile Views', value: '24', color: '#F472B6' },
-            { icon: MessageCircle, label: 'New Messages', value: '5', color: '#60A5FA' }
+            { icon: Eye, label: 'Profile Views', value: '48', change: '+12%' },
+            { icon: Heart, label: 'Likes Received', value: '24', change: '+8%' },
+            { icon: Star, label: 'Matches', value: '12', change: '+3' }
           ].map((stat, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
+              transition={{ delay: 0.1 * i }}
               whileHover={{ y: -4 }}
-              style={{
-                padding: 28,
-                background: 'rgba(255,255,255,0.02)',
-                borderRadius: 20,
-                border: '1px solid rgba(255,255,255,0.05)',
-                cursor: 'pointer'
-              }}
+              className="card"
+              style={{ padding: 20 }}
             >
-              <div style={{
-                width: 52,
-                height: 52,
-                borderRadius: 14,
-                background: `${stat.color}15`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: 20
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'space-between',
+                marginBottom: 12
               }}>
-                <stat.icon size={26} color={stat.color} />
+                <div style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 10,
+                  background: 'rgba(212, 175, 55, 0.1)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <stat.icon size={18} color="var(--gold)" />
+                </div>
+                <span style={{ 
+                  fontSize: 11, 
+                  color: '#10B981',
+                  background: 'rgba(16, 185, 129, 0.1)',
+                  padding: '2px 8px',
+                  borderRadius: 10
+                }}>
+                  {stat.change}
+                </span>
               </div>
-              <div style={{ fontSize: '2.5rem', fontWeight: 600, marginBottom: 4 }}>{stat.value}</div>
-              <div style={{ color: 'var(--gray-light)', fontSize: 14 }}>{stat.label}</div>
+              <div style={{ fontSize: '1.8rem', fontWeight: 700, marginBottom: 4 }}>{stat.value}</div>
+              <div style={{ fontSize: 13, color: 'var(--gray-500)' }}>{stat.label}</div>
             </motion.div>
           ))}
         </div>
 
-        {/* Two Column Layout */}
-        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 24 }}>
-          {/* Quick Actions */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            style={{
-              padding: 28,
-              background: 'rgba(255,255,255,0.02)',
-              borderRadius: 20,
-              border: '1px solid rgba(255,255,255,0.05)'
-            }}
-          >
-            <h2 style={{ fontSize: '1.3rem', marginBottom: 24, display: 'flex', alignItems: 'center', gap: 12 }}>
-              <Compass size={24} color="#D4AF37" />
-              Quick Actions
-            </h2>
-
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-              {[
-                { icon: Heart, label: 'Start Discovering', desc: 'Find your perfect match', path: '/discover', color: '#F472B6' },
-                { icon: User, label: 'Complete Profile', desc: 'Add photos & details', path: '/profile', color: '#A78BFA' },
-                { icon: MessageCircle, label: 'View Messages', desc: 'Chat with matches', path: '/matches', color: '#60A5FA' },
-                { icon: Settings, label: 'Settings', desc: 'Preferences & privacy', path: '/profile', color: '#6B7280' }
-              ].map((action, i) => (
-                <motion.div
-                  key={i}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => navigate(action.path)}
-                  style={{
-                    padding: 20,
-                    background: 'rgba(255,255,255,0.02)',
-                    borderRadius: 16,
-                    border: '1px solid rgba(255,255,255,0.05)',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 16
-                  }}
-                >
-                  <div style={{
-                    width: 48,
-                    height: 48,
-                    borderRadius: 12,
-                    background: `${action.color}15`,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}>
-                    <action.icon size={22} color={action.color} />
-                  </div>
-                  <div style={{ flex: 1 }}>
-                    <h3 style={{ fontSize: 15, marginBottom: 4 }}>{action.label}</h3>
-                    <p style={{ color: 'var(--gray)', fontSize: 13 }}>{action.desc}</p>
-                  </div>
-                  <ChevronRight size={18} color="var(--gray)" />
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Verification Status */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            style={{
-              padding: 28,
-              background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0.02) 100%)',
-              borderRadius: 20,
-              border: '1px solid rgba(212, 175, 55, 0.15)'
-            }}
-          >
-            <h2 style={{ fontSize: '1.3rem', marginBottom: 24, display: 'flex', alignItems: 'center', gap: 12 }}>
-              <Shield size={24} color="#D4AF37" />
-              Verification
-            </h2>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-              {verificationSteps.map((step, i) => (
-                <div
-                  key={step.id}
-                  style={{
-                    padding: 16,
-                    background: step.done ? 'rgba(16, 185, 129, 0.1)' : 'rgba(255,255,255,0.02)',
-                    borderRadius: 12,
-                    border: `1px solid ${step.done ? 'rgba(16, 185, 129, 0.2)' : 'rgba(255,255,255,0.05)'}`,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 12
-                  }}
-                >
-                  {step.done ? (
-                    <CheckCircle size={20} color="#10B981" />
-                  ) : (
-                    <Clock size={20} color="#6B7280" />
-                  )}
-                  <span style={{ 
-                    fontSize: 14, 
-                    color: step.done ? '#10B981' : 'var(--gray-light)'
-                  }}>
-                    {step.label}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            {completedSteps < verificationSteps.length && (
-              <motion.button
-                whileHover={{ scale: 1.02 }}
+        {/* Quick Actions */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <h2 style={{ fontSize: '1.1rem', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Zap size={18} color="var(--gold)" /> Quick Actions
+          </h2>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16 }}>
+            {quickActions.map((action, i) => (
+              <motion.div
+                key={i}
+                whileHover={{ scale: 1.02, y: -4 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => navigate('/profile')}
-                className="btn-gold"
-                style={{ width: '100%', marginTop: 20 }}
+                onClick={() => navigate(action.path)}
+                style={{
+                  padding: 24,
+                  background: 'var(--gradient-card)',
+                  borderRadius: 20,
+                  border: '1px solid rgba(255,255,255,0.06)',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 16
+                }}
               >
-                Complete Verification
+                <div style={{
+                  width: 56,
+                  height: 56,
+                  borderRadius: 16,
+                  background: action.gradient,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: `0 10px 30px ${action.color}30`
+                }}>
+                  <action.icon size={26} color="white" />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <h3 style={{ fontSize: '1.05rem', marginBottom: 4 }}>{action.label}</h3>
+                  <p style={{ fontSize: 13, color: 'var(--gray-500)' }}>{action.desc}</p>
+                </div>
+                <ChevronRight size={20} color="var(--gray-600)" />
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Recent Activity */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          style={{ marginTop: 24 }}
+        >
+          <h2 style={{ fontSize: '1.1rem', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Sparkles size={18} color="var(--gold)" /> Recent Activity
+          </h2>
+          
+          <div className="card" style={{ padding: 24 }}>
+            <div style={{ textAlign: 'center', padding: '20px 0' }}>
+              <Sparkles size={40} color="var(--gray-600)" style={{ marginBottom: 12 }} />
+              <p style={{ color: 'var(--gray-500)', fontSize: 14 }}>
+                Start discovering to see activity here
+              </p>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => navigate('/discover')}
+                className="btn btn-gold"
+                style={{ marginTop: 16 }}
+              >
+                Start Discovering
               </motion.button>
-            )}
-          </motion.div>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Bottom Navigation */}
+      <nav style={{
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        padding: '12px 24px 24px',
+        background: 'linear-gradient(to top, rgba(3, 5, 8, 1) 0%, rgba(3, 5, 8, 0.95) 50%, transparent 100%)',
+        display: 'flex',
+        justifyContent: 'center',
+        zIndex: 100
+      }}>
+        <div style={{
+          display: 'flex',
+          gap: 8,
+          padding: 8,
+          background: 'rgba(255,255,255,0.03)',
+          borderRadius: 20,
+          border: '1px solid rgba(255,255,255,0.06)',
+          backdropFilter: 'blur(20px)'
+        }}>
+          {[
+            { icon: Crown, path: '/dashboard', active: true },
+            { icon: Compass, path: '/discover' },
+            { icon: Heart, path: '/matches' },
+            { icon: MessageCircle, path: '/matches' },
+            { icon: User, path: '/profile' }
+          ].map((item, i) => (
+            <motion.button
+              key={i}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => navigate(item.path)}
+              style={{
+                width: 52,
+                height: 52,
+                borderRadius: 14,
+                background: item.active ? 'var(--gradient-gold)' : 'transparent',
+                border: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer'
+              }}
+            >
+              <item.icon 
+                size={22} 
+                color={item.active ? '#030508' : 'var(--gray-500)'} 
+              />
+            </motion.button>
+          ))}
         </div>
-      </main>
+      </nav>
     </div>
   );
 };
