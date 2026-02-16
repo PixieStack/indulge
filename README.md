@@ -109,20 +109,20 @@ CORS_ORIGINS=*
 
 ## Testing the API
 
-### Using curl (Windows PowerShell)
+### Using curl (Linux/Codespaces)
 
-```powershell
+```bash
 # Health check
 curl http://localhost:8001/docs
 
 # Sign up
-curl -X POST http://localhost:8001/api/auth/signup `
-  -H "Content-Type: application/json" `
+curl -X POST http://localhost:8001/api/auth/signup \
+  -H "Content-Type: application/json" \
   -d '{"email":"test@example.com","phone":"+1234567890","password":"password123","role":"baby","first_name":"Test"}'
 
 # Login
-curl -X POST http://localhost:8001/api/auth/login `
-  -H "Content-Type: application/json" `
+curl -X POST http://localhost:8001/api/auth/login \
+  -H "Content-Type: application/json" \
   -d '{"email":"test@example.com","password":"password123"}'
 ```
 
@@ -136,13 +136,12 @@ Visit `http://localhost:8001/docs` for interactive API documentation.
 
 ### Common Issues
 
-1. **PostgreSQL connection error**
-   - Ensure PostgreSQL service is running
-   - Verify credentials in `.env`
-   - Check if database exists
+1. **Supabase connection error**
+   - Check DATABASE_URL in `.env`
+   - Ensure password special characters are URL-encoded
+   - Verify Supabase project is active
 
 2. **Module not found errors**
-   - Ensure virtual environment is activated
    - Run `pip install -r requirements.txt` again
 
 3. **Alembic migration errors**
