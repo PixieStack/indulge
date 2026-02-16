@@ -1,12 +1,12 @@
-# INDULGE - Premium Dating Platform API
+# INDULGE - Premium Dating Platform
 
-A FastAPI backend for a premium dating platform with Supabase/PostgreSQL database, email/SMS verification, and user matching system.
+A luxury dating platform with React frontend and FastAPI backend, featuring gold and black aesthetics.
 
 ## Tech Stack
 
+- **Frontend**: React 18, Framer Motion, Lucide Icons
 - **Backend**: Python 3.11+ / FastAPI
 - **Database**: Supabase (PostgreSQL with SQLAlchemy async)
-- **Migrations**: Alembic
 - **Auth**: JWT (python-jose) + bcrypt
 - **Email**: Resend
 - **SMS**: Twilio Verify API
@@ -15,58 +15,78 @@ A FastAPI backend for a premium dating platform with Supabase/PostgreSQL databas
 
 ## Quick Start (GitHub Codespaces / Linux)
 
-### Run these commands in order:
+### 1. Setup Environment File
 
+Create `.env` file in root directory:
 ```bash
-# 1. Install dependencies
-pip install -r requirements.txt
-
-# 2. Run database migrations (creates tables in Supabase)
-alembic upgrade head
-
-# 3. Start the server
-uvicorn server:app --reload --host 0.0.0.0 --port 8001
-```
-
-The API will be available at: `http://localhost:8001`  
-API Documentation: `http://localhost:8001/docs`
-
----
-
-## Setup with Virtual Environment (Optional but Recommended)
-
-```bash
-# 1. Create virtual environment
-python -m venv venv
-
-# 2. Activate it (Linux/Mac/Codespaces)
-source venv/bin/activate
-
-# 3. Install dependencies
-pip install -r requirements.txt
-
-# 4. Run migrations
-alembic upgrade head
-
-# 5. Start server
-uvicorn server:app --reload --host 0.0.0.0 --port 8001
-```
-
----
-
-## Environment Variables
-
-The `.env` file is already configured with Supabase. Key variables:
-
-```env
-# Database - Supabase
-DATABASE_URL=postgresql://postgres.xxx:password@aws-1-eu-central-1.pooler.supabase.com:5432/postgres
-
-# JWT Secret
-JWT_SECRET_KEY=your-secret-key
-
-# CORS
+cat > .env << 'EOF'
+DATABASE_URL=postgresql://postgres.gydfdxgttwgloyonntvh:YOUR_PASSWORD@aws-1-eu-central-1.pooler.supabase.com:5432/postgres
+JWT_SECRET_KEY=your-secret-key-change-in-production
 CORS_ORIGINS=*
+EOF
+```
+
+### 2. Install & Run Backend
+
+```bash
+# Remove emergentintegrations if present (it's platform-specific)
+sed -i '/emergentintegrations/d' requirements.txt
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Start backend server
+python -m uvicorn server:app --reload --host 0.0.0.0 --port 8001
+```
+
+### 3. Install & Run Frontend (in a new terminal)
+
+```bash
+cd frontend
+
+# Install dependencies
+npm install
+
+# Start frontend
+npm start
+```
+
+### Access the App
+
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:8001
+- **API Docs**: http://localhost:8001/docs
+
+---
+
+## Features
+
+- Landing page with stunning gold/black design
+- User registration (Sugar Baby / Sugar Daddy / Sugar Mommy)
+- Login / Authentication
+- Dashboard with stats
+- Discovery/Swiping feed
+- Matches list
+- Real-time messaging
+- Profile management
+- Verification system
+
+---
+
+## Project Structure
+
+```
+├── frontend/               # React frontend
+│   ├── src/
+│   │   ├── pages/         # Landing, Login, Signup, Dashboard, etc.
+│   │   ├── contexts/      # Auth context
+│   │   └── index.css      # Global styles (gold/black theme)
+│   └── package.json
+├── server.py              # FastAPI backend
+├── database.py            # Database config
+├── models_pg.py           # SQLAlchemy models
+├── requirements.txt       # Python dependencies
+└── .env                   # Environment variables
 ```
 
 ---
